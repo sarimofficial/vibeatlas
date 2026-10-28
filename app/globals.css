@@ -203,11 +203,14 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .banner.error { border-left-color: var(--accent); background: var(--accent-tint); }
 .banner code { background: var(--paper-2); border-radius: 4px; padding: 1px 5px; font-size: 0.88em; }
 
-.hint { color: var(--muted); font-size: 0.92rem; margin: 10px 0 0; }
+.hint { color: var(--muted); font-size: 0.92rem; margin: 10px 0 0; overflow-wrap: anywhere; word-break: break-word; }
 .hint:first-child { margin-top: 0; }
 
 /* ---- Coherence: serif figure + thin single-colour scale ---- */
-.coherence { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+.coherence { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; min-width: 0; }
+.coherence > div { min-width: 0; }
+.coherence-text { flex: 1; min-width: 0; }
+.coherence p { overflow-wrap: anywhere; word-break: break-word; }
 .coherence .big {
   font-family: var(--font-display);
   font-size: 3.25rem; font-weight: 700; letter-spacing: -0.02em;
@@ -294,6 +297,8 @@ footer {
   .card { padding: 20px 16px; }
   .topbar { margin-bottom: 32px; }
   .top-meta { text-align: left; }
+  .coherence { flex-direction: column; gap: 12px; }
+  .coherence-text { flex: none; width: 100%; }
   .coherence .big { font-size: 2.6rem; }
   .timeline::before { left: 23px; }
   .pick { gap: 12px; }

@@ -252,7 +252,7 @@ export default function Home() {
                 <div className="big">{Math.round(plan.coherence * 100)}%</div>
                 <div className="big-label">Mean affinity across the plan</div>
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="coherence-text">
                 <p className="hint" style={{ margin: 0 }}>
                   Mean Qloo affinity across the plan
                   {plan.mode === "demo" ? " (sample values in demo mode)" : ""}.
