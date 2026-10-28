@@ -118,11 +118,11 @@ export default function Home() {
           Qloo&rsquo;s taste graph. Every pick shows its affinity and why it
           matches, so you can see the evidence instead of trusting a guess.
         </p>
-        <div className="atlas-meta" aria-label="What VibeAtlas shows">
-          <span><strong>5-slot route</strong> — one day, in order</span>
-          <span><strong>Affinity 0–1</strong> — scored, not guessed</span>
-          <span><strong>Why this match</strong> — evidence per stop</span>
-          <span><strong>Replace any stop</strong> — one pick at a time</span>
+        <div className="spec-grid" aria-label="What VibeAtlas shows">
+          <div><p className="spec-label">Route</p><p className="spec-value">5 slots, in order</p></div>
+          <div><p className="spec-label">Affinity</p><p className="spec-value">0–1, scored</p></div>
+          <div><p className="spec-label">Evidence</p><p className="spec-value">Why this match</p></div>
+          <div><p className="spec-label">Control</p><p className="spec-value">Replace any stop</p></div>
         </div>
       </section>
 
@@ -240,7 +240,7 @@ export default function Home() {
 
       {plan && (
         <>
-          <section className="card" aria-labelledby="coherence-heading">
+          <section className="card coherence-card" aria-labelledby="coherence-heading">
             <div className="section-head">
               <div>
                 <p className="section-num">Your day</p>
