@@ -111,7 +111,7 @@ through the judging period and are deactivated after the hackathon closes.
 ## Testing (done in demo mode)
 
 Example input from the plan: Frank Ocean, Interstellar, minimalist fashion,
-specialty coffee, quiet places, city Karachi → plan → replace one pick →
+specialty coffee, quiet places, city New York → plan → replace one pick →
 re-plan → empty-input validation. No real credentials are required to run
 the app or its build; live Qloo behaviour can only be confirmed with a real
 key (see Limitations).
@@ -131,11 +131,11 @@ succeeds.
 ## Known limitations
 
 - Live Qloo behaviour (exact search/insights response shapes, place
-  coverage for Karachi) is implemented from the current Qloo docs but has
+  coverage for New York) is implemented from the current Qloo docs but has
   NOT been verified with a real key yet — that test is the first thing to
   do once a key arrives. If the first live call 401s, check the host first
   (hackathon vs production); if it 404s, check the fallback paths.
-- Qloo place coverage varies by city; Karachi place/destination slots may
+- Qloo place coverage varies by city; New York place/destination slots may
   come back empty and will be shown as missing rather than invented.
 - Budget and time are not Qloo filters (see above) — they are shown as
   user constraints on the plan.

@@ -7,7 +7,7 @@ import { ALL_SLOTS, SLOT_META } from "@/lib/types";
 const EXAMPLE = {
   likes:
     "Frank Ocean, Interstellar, minimalist fashion, specialty coffee, quiet places",
-  city: "Karachi",
+  city: "New York",
   budget: "Moderate",
   timeAvailable: "Full day",
   avoid: "",
@@ -22,7 +22,7 @@ function splitList(text: string): string[] {
 
 export default function Home() {
   const [likes, setLikes] = useState("");
-  const [city, setCity] = useState("Karachi");
+  const [city, setCity] = useState("New York");
   const [budget, setBudget] = useState("");
   const [timeAvailable, setTimeAvailable] = useState("");
   const [avoid, setAvoid] = useState("");
@@ -100,7 +100,7 @@ export default function Home() {
           </span>
         </div>
         <div className="top-meta">
-          <strong>Karachi · Taste Atlas</strong>
+          <strong>New York · Taste Atlas</strong>
           <br />
           Qloo Agentic Hackathon
         </div>
@@ -169,7 +169,7 @@ export default function Home() {
               id="city"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              placeholder="Karachi"
+              placeholder="New York"
             />
           </div>
           <div>

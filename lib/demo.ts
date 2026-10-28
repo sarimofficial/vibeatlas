@@ -6,7 +6,7 @@ import type { Pick, Slot } from "./types";
  * testing. They are never live Qloo results and the UI marks every one
  * "(demo)" with a DEMO MODE banner. The first set is tuned to the plan
  * file's example (Frank Ocean, Interstellar, minimalist fashion,
- * specialty coffee, quiet places, Karachi); the alternative set is what
+ * specialty coffee, quiet places, New York); the alternative set is what
  * a veto / Surprise Me re-plan returns.
  */
 function pick(
