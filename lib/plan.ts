@@ -199,7 +199,7 @@ export async function buildPlan(req: PlanRequest): Promise<PlanResponse> {
       .map((c) => `${c.type}: ${c.error ? `error` : `${c.results.length} results`}`)
       .join("; ");
     exploreDetails.push(
-      `${slot}: GET ${qlooBaseUrl()}/v2/insights (fallback /insights) with filter.type attempts [${calls.map((c) => c.type).join(", ")}], signal.interests.entities=<${entityIds.length} IDs>, feature.explainability=true, take=8${city && (slot === "coffee" || slot === "afternoon" || slot === "dining") ? `, filter.location.query=${city}` : ""} → ${callSummary}${chosen ? `; kept ${chosen.name} (${chosenType}, affinity ${chosen.affinity.toFixed(2)})` : "; no usable candidate — slot left missing, not invented."}`,
+      `${slot}: GET ${qlooBaseUrl()}/v2/insights (fallback /insights) with filter.type attempts [${calls.map((c) => c.type).join(", ")}], signal.interests.entities=<${entityIds.length} IDs>, feature.explainability=true, take=8 → ${callSummary}${chosen ? `; kept ${chosen.name} (${chosenType}, affinity ${chosen.affinity.toFixed(2)})` : "; no usable candidate — slot left missing, not invented."}`,
     );
   }
 

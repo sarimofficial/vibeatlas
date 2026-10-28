@@ -144,8 +144,15 @@ export interface RawInsight {
 
 function parseInsights(data: unknown): RawInsight[] {
   const root = data as Record<string, unknown>;
-  const results = (root?.results ?? []) as RawInsight[];
-  return Array.isArray(results) ? results : [];
+  const results = root?.results as unknown;
+  if (Array.isArray(results)) return results as RawInsight[];
+  if (results && typeof results === "object") {
+    const r = results as Record<string, unknown>;
+    if (Array.isArray(r.entities)) return r.entities as RawInsight[];
+    if (Array.isArray(r.results)) return r.results as RawInsight[];
+  }
+  if (Array.isArray(root?.entities)) return root.entities as RawInsight[];
+  return [];
 }
 
 export function affinityOf(r: RawInsight): number {
@@ -216,10 +223,14 @@ export async function insightsForSlot(
       take: "8",
     });
     if (excluded.length > 0) params.set("filter.exclude.entities", excluded.join(","));
-    // Location is only a documented filter for place-like results.
-    if ((type === "urn:entity:place" || type === "urn:entity:destination") && city) {
-      params.set("filter.location.query", city);
-    }
+    // NOTE: filter.location.query is NOT in the Place/Destination supported
+    // parameter lists (it belongs to heatmap queries) and Qloo silently
+    // ignores unsupported parameters, so we do NOT send it. City is a
+    // display constraint only, like budget/time, until a documented
+    // place-location parameter is confirmed. Sending it previously could
+    // not by itself explain empty results, but removing it removes one
+    // unsupported parameter from every place/destination call.
+    void city;
     try {
       const data = await getWithFallback([
         `/v2/insights?${params.toString()}`,
