@@ -38,6 +38,9 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [dark, setDark] = useState(false);
+  const [rating, setRating] = useState<"up" | "down" | null>(null);
+  const [savedDays, setSavedDays] = useState<{ city: string; budget: string; timeAvailable: string; plan: PlanResponse; savedAt: string }[]>([]);
 
   async function callPlan(body: Record<string, unknown>) {
     setLoading(true);
@@ -117,6 +120,14 @@ export default function Home() {
 
   const sharedLoaded = useRef(false);
   useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem("vibeatlas-saved-days");
+      if (raw) setSavedDays(JSON.parse(raw));
+    } catch {
+      // Saved days are best-effort.
+    }
+  }, []);
+  useEffect(() => {
     if (sharedLoaded.current) return;
     sharedLoaded.current = true;
     try {
@@ -145,7 +156,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="wrap">
+    <main className={dark ? "wrap dark" : "wrap"}>
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true">VA</span>
@@ -160,6 +171,9 @@ export default function Home() {
           <br />
           Qloo Agentic Hackathon
         </div>
+        <button className="btn-ghost" type="button" onClick={() => setDark(!dark)}>
+          {dark ? "☀ Light" : "🌙 Dark"}
+        </button>
       </header>
 
       <section className="hero">
@@ -488,6 +502,65 @@ export default function Home() {
               >
                 Print day plan
               </button>
+              <button
+                className="btn-ghost"
+                type="button"
+                onClick={() => {
+                  const today = new Date();
+                  const y = today.getFullYear();
+                  const m = String(today.getMonth() + 1).padStart(2, "0");
+                  const d = String(today.getDate()).padStart(2, "0");
+                  const stamp = `${y}${m}${d}T000000`;
+                  const events = ALL_SLOTS.map((slot) => {
+                    const pick = plan.picks.find((p) => p.slot === slot);
+                    if (!pick) return "";
+                    const meta = SLOT_META[slot];
+                    const [hh, mm] = meta.time.split(":");
+                    const endH = String((parseInt(hh, 10) + 1) % 24).padStart(2, "0");
+                    const esc = (s: string) => s.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+                    return [
+                      "BEGIN:VEVENT",
+                      `UID:${pick.id}@vibeatlas`,
+                      `DTSTAMP:${stamp}`,
+                      `DTSTART:${y}${m}${d}T${hh}${mm}00`,
+                      `DTEND:${y}${m}${d}T${endH}${mm}00`,
+                      `SUMMARY:${esc(pick.name)}`,
+                      `DESCRIPTION:${esc(`${pick.why} Affinity ${pick.affinity.toFixed(2)} in ${city.trim() || "New York"}.`)}`,
+                      "END:VEVENT",
+                    ].join("\r\n");
+                  }).filter(Boolean).join("\r\n");
+                  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//VibeAtlas//EN", events, "END:VCALENDAR"].join("\r\n");
+                  const blob = new Blob([ics], { type: "text/calendar" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = "vibeatlas-day.ics";
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+              >
+                Download calendar (.ics)
+              </button>
+              <button
+                className="btn-ghost"
+                type="button"
+                onClick={() => {
+                  if (!plan) return;
+                  const entry = { city: city.trim() || "New York", budget, timeAvailable, plan, savedAt: new Date().toISOString() };
+                  const next = [entry, ...savedDays].slice(0, 5);
+                  setSavedDays(next);
+                  try { window.localStorage.setItem("vibeatlas-saved-days", JSON.stringify(next)); } catch { /* best-effort */ }
+                }}
+              >
+                Save this day
+              </button>
+            </div>
+            <div className="share-row">
+              <span className="meta">Did this day feel right? </span>
+              <button className="btn-ghost" type="button" onClick={() => setRating("up")} style={rating === "up" ? { borderColor: "var(--accent)" } : undefined}>👍 Yes</button>
+              {" "}
+              <button className="btn-ghost" type="button" onClick={() => setRating("down")} style={rating === "down" ? { borderColor: "var(--accent)" } : undefined}>👎 Not quite</button>
+              {rating ? <span className="hint" style={{ marginLeft: 8 }}>Thanks for rating!</span> : null}
             </div>
             <div className="share-row">
               <span className="meta">Share: </span>
@@ -746,6 +819,32 @@ export default function Home() {
             </ol>
           </section>
         </>
+      )}
+
+      {savedDays.length > 0 && (
+        <section className="card" aria-labelledby="saved-heading">
+          <p className="section-num">Saved</p>
+          <h2 id="saved-heading">My saved days</h2>
+          <p className="hint">Saved in this browser only — no account, no server.</p>
+          <div className="chips" style={{ marginTop: 12 }}>
+            {savedDays.map((saved, idx) => (
+              <button
+                key={`${saved.savedAt}-${idx}`}
+                className="chip"
+                type="button"
+                onClick={() => {
+                  setPlan(saved.plan);
+                  setCity(saved.city);
+                  setBudget(saved.budget);
+                  setTimeAvailable(saved.timeAvailable);
+                  document.getElementById("build-form")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                {saved.city} · {Math.round(saved.plan.coherence * 100)}% · {new Date(saved.savedAt).toLocaleDateString()}
+              </button>
+            ))}
+          </div>
+        </section>
       )}
 
       <section className="card" aria-labelledby="why-heading">

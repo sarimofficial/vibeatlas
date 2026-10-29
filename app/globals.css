@@ -118,6 +118,22 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .hint { color: var(--muted); font-size: 0.92rem; margin: 10px 0 0; overflow-wrap: anywhere; word-break: break-word; }
 .hint:first-child { margin-top: 0; }
 
+/* Dark mode — same variables, dark values (ChatGPT palette, no function change) */
+.dark {
+  --paper: #101522;
+  --paper-2: #1B2232;
+  --surface: #1B2232;
+  --ink: #f5f2ec;
+  --ink-2: #e8e2d6;
+  --muted: #b8b0a2;
+  --line: #2a3348;
+  --line-strong: #3a4660;
+  --accent: #9B8CFF;
+  --accent-dark: #b3a6ff;
+  --accent-tint: #2a2440;
+  --ink-tint: #1B2232;
+}
+
 /* Day summary — Pinterest Pin 1 pattern: one summary strip above the timeline */
 .day-summary { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 20px; padding: 14px 0; border-top: 1px solid rgba(250, 247, 241, 0.25); border-bottom: 1px solid rgba(250, 247, 241, 0.25); font-size: 0.92rem; color: #c9c0b2; }
 .day-summary strong { color: var(--paper); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.75rem; margin-right: 6px; }
