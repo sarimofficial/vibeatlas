@@ -322,14 +322,21 @@ export default function Home() {
             )}
           </section>
 
-          <section className="timeline" aria-label="Day plan timeline">
+          <section className="timeline" aria-label="Day plan taste board">
+            <div className="board-head">
+              <p className="section-num">Your day, as a board</p>
+              <h2>Your Taste Board</h2>
+              <p className="hint" style={{ margin: "6px 0 0" }}>
+                Five stops, pinned like a board — each card keeps its time, affinity, tags and why-it-matches evidence.
+              </p>
+            </div>
             {ALL_SLOTS.map((slot, i) => {
               const pick = plan.picks.find((p) => p.slot === slot);
               const meta = SLOT_META[slot];
               const stop = String(i + 1).padStart(2, "0");
               if (!pick) {
                 return (
-                  <article className="card pick" key={slot} style={{ marginTop: 0 }}>
+                  <article className={`card pick pick-${slot}`} key={slot} style={{ marginTop: 0 }}>
                     <span className="stop-num" aria-hidden="true">{stop}</span>
                     <div className="time" aria-hidden="true">{meta.icon}</div>
                     <div className="pick-body">
@@ -345,7 +352,7 @@ export default function Home() {
                 );
               }
               return (
-                <article className="card pick" key={pick.id} style={{ marginTop: 0 }}>
+                <article className={`card pick pick-${slot}`} key={pick.id} style={{ marginTop: 0 }}>
                   <span className="stop-num" aria-hidden="true">{stop}</span>
                   <div className="time" aria-hidden="true">{meta.icon}</div>
                   <div className="pick-body">
