@@ -118,6 +118,23 @@ export default function Home() {
           Qloo&rsquo;s taste graph. Every pick shows its affinity and why it
           matches, so you can see the evidence instead of trusting a guess.
         </p>
+        <div className="btnrow">
+          <a className="btn-primary" href="#build-form">Build my day</a>
+          <button
+            className="btn-ghost"
+            type="button"
+            onClick={() => {
+              setLikes(EXAMPLE.likes);
+              setCity(EXAMPLE.city);
+              setBudget(EXAMPLE.budget);
+              setTimeAvailable(EXAMPLE.timeAvailable);
+              setAvoid(EXAMPLE.avoid);
+              document.getElementById("build-form")?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            Explore the example
+          </button>
+        </div>
         <div className="spec-grid" aria-label="What VibeAtlas shows">
           <div><p className="spec-label">Route</p><p className="spec-value">5 slots, in order</p></div>
           <div><p className="spec-label">Affinity</p><p className="spec-value">0–1, scored</p></div>
@@ -148,7 +165,7 @@ export default function Home() {
         </div>
       )}
 
-      <section className="card" aria-labelledby="build-heading">
+      <section className="card" id="build-form" aria-labelledby="build-heading">
         <p className="section-num">Step 1</p>
         <h2 id="build-heading">What do you love?</h2>
         <p className="hint">
@@ -156,6 +173,24 @@ export default function Home() {
           likes work best (artists, films, foods, styles, places).
         </p>
         <label htmlFor="likes">Artists, films, food, fashion, places you love</label>
+        <div className="chips" aria-label="Quick likes">
+          {["Frank Ocean", "Interstellar", "Specialty coffee", "Minimalist fashion", "Quiet places"].map((chip) => {
+            const active = splitList(likes).includes(chip);
+            return (
+              <button
+                key={chip}
+                className={`chip${active ? " chip-active" : ""}`}
+                type="button"
+                onClick={() => {
+                  const list = splitList(likes);
+                  setLikes(active ? list.filter((x) => x !== chip).join(", ") : [...list, chip].join(", "));
+                }}
+              >
+                {active ? "✓ " : "+ "}{chip}
+              </button>
+            );
+          })}
+        </div>
         <textarea
           id="likes"
           value={likes}
@@ -174,21 +209,32 @@ export default function Home() {
           </div>
           <div>
             <label htmlFor="budget">Budget (shown on the plan, not a Qloo filter)</label>
-            <input
+            <select
               id="budget"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
-              placeholder="e.g. Moderate"
-            />
+            >
+              <option value="">e.g. Moderate</option>
+              <option value="Low">Low</option>
+              <option value="Moderate">Moderate</option>
+              <option value="High">High</option>
+              <option value="Luxury">Luxury</option>
+            </select>
           </div>
           <div>
             <label htmlFor="time">How much time do you have?</label>
-            <input
+            <select
               id="time"
               value={timeAvailable}
               onChange={(e) => setTimeAvailable(e.target.value)}
-              placeholder="e.g. Full day"
-            />
+            >
+              <option value="">e.g. Full day</option>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+              <option value="Half day">Half day</option>
+              <option value="Full day">Full day</option>
+            </select>
           </div>
           <div>
             <label htmlFor="avoid">What should the agent avoid?</label>
