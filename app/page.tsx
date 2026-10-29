@@ -537,6 +537,18 @@ export default function Home() {
         </p>
       </section>
 
+      <section className="card maker-note" aria-labelledby="maker-heading">
+        <p className="section-num">A note from the maker</p>
+        <h2 id="maker-heading">Why I built this</h2>
+        <p className="why">
+          I built VibeAtlas because taste is personal — no two days should look the same.
+          I wanted a planner that does not guess from a generic list, but starts from what
+          you already love and shows you why each stop fits. If a pick does not feel right,
+          replace just that one stop. The rest of your day stays yours.
+        </p>
+        <p className="hint">— Muhammad Sarim, Karachi · Built new for the Qloo Agentic Hackathon</p>
+      </section>
+
       <footer>
         VibeAtlas — built new for the Qloo Agentic Hackathon. MIT licensed.
         <br />

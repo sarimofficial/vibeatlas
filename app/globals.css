@@ -152,6 +152,11 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   .route-node { flex: 0 0 150px; }
 }
 
+/* Human touch — varied board, not a perfect uniform grid */
+.timeline .pick-coffee { grid-column: 1 / -1; }
+.maker-note { background: var(--paper-2); }
+.maker-note h2 { font-family: var(--font-display); font-style: italic; }
+
 /* Taste board — Pinterest-style grid, not a single-column timeline */
 .timeline { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; align-items: start; }
 .timeline::before { display: none; }
