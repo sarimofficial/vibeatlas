@@ -368,6 +368,28 @@ export default function Home() {
             )}
           </section>
 
+          <section className="card route-card" aria-labelledby="route-heading">
+            <p className="section-num">Route first</p>
+            <h2 id="route-heading">Route Map</h2>
+            <div className="route-map">
+              {ALL_SLOTS.map((slot, i) => {
+                const pick = plan.picks.find((p) => p.slot === slot);
+                const meta = SLOT_META[slot];
+                return (
+                  <div className="route-node" key={slot}>
+                    <div className="route-stop">{String(i + 1).padStart(2, "0")}</div>
+                    <div className="route-time">{meta.time}</div>
+                    <div className="route-name">{pick ? pick.name : "Missing — not invented"}</div>
+                    {pick ? <div className="route-aff">{Math.round(pick.affinity * 100)}%</div> : null}
+                  </div>
+                );
+              })}
+            </div>
+            <p className="hint">
+              Schematic route in slot order — not a geographic map. Qloo returns no coordinates, so no real map or distance is claimed.
+            </p>
+          </section>
+
           <section className="timeline" aria-label="Day plan taste board">
             <div className="board-head">
               <p className="section-num">Your day, as a board</p>
