@@ -192,7 +192,37 @@ export default function Home() {
           ))}
         </div>
         <div className="btnrow">
-          <a className="btn-primary" href="#build-form">Build my day</a>
+          <button
+            className="btn-primary"
+            type="button"
+            disabled={loading}
+            onClick={() => {
+              const current = splitList(likes);
+              if (current.length === 0) {
+                setLikes(EXAMPLE.likes);
+                setCity(EXAMPLE.city);
+                setBudget(EXAMPLE.budget);
+                setTimeAvailable(EXAMPLE.timeAvailable);
+                setAvoid(EXAMPLE.avoid);
+                void callPlan({
+                  likes: splitList(EXAMPLE.likes),
+                  city: EXAMPLE.city,
+                  budget: EXAMPLE.budget,
+                  timeAvailable: EXAMPLE.timeAvailable,
+                  avoid: [],
+                  excluded: [],
+                });
+              } else {
+                void callPlan({ ...baseBody(), excluded: [] });
+                setExcluded([]);
+              }
+              setTimeout(() => {
+                document.getElementById("build-form")?.scrollIntoView({ behavior: "smooth" });
+              }, 100);
+            }}
+          >
+            {loading ? "Agent is planning…" : "Build my day"}
+          </button>
           <button
             className="btn-ghost"
             type="button"
