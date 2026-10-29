@@ -100,7 +100,7 @@ export default function Home() {
           </span>
         </div>
         <div className="top-meta">
-          <strong>New York · Taste Atlas</strong>
+          <strong>USA · Taste Atlas</strong>
           <br />
           Qloo Agentic Hackathon
         </div>
@@ -199,13 +199,26 @@ export default function Home() {
         />
         <div className="grid2">
           <div>
-            <label htmlFor="city">City you are exploring</label>
-            <input
+            <label htmlFor="city">City you are exploring (USA)</label>
+            <select
               id="city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="New York"
-            />
+              value={["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose", "Austin", "San Francisco", "Seattle", "Miami", "Boston", "Denver", "Atlanta", "Las Vegas", "Portland", "Nashville"].includes(city) ? city : "Other"}
+              onChange={(e) => setCity(e.target.value === "Other" ? "" : e.target.value)}
+            >
+              {["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose", "Austin", "San Francisco", "Seattle", "Miami", "Boston", "Denver", "Atlanta", "Las Vegas", "Portland", "Nashville"].map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+              <option value="Other">Other city…</option>
+            </select>
+            {!["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose", "Austin", "San Francisco", "Seattle", "Miami", "Boston", "Denver", "Atlanta", "Las Vegas", "Portland", "Nashville"].includes(city) ? (
+              <input
+                id="city-other"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="Type any city"
+                style={{ marginTop: 8 }}
+              />
+            ) : null}
           </div>
           <div>
             <label htmlFor="budget">Budget (shown on the plan, not a Qloo filter)</label>
