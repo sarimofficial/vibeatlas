@@ -284,6 +284,18 @@ export default function Home() {
         </p>
       </section>
 
+      <section className="card" aria-labelledby="how-heading">
+        <p className="section-num">How it works</p>
+        <h2 id="how-heading">How the agent works</h2>
+        <ol className="steps">
+          <li><div className="st">1. UNDERSTAND</div><div className="sd">Your likes, city, budget and time are parsed. Budget and time are display constraints only, not Qloo filters.</div></li>
+          <li><div className="st">2. RESOLVE TASTE</div><div className="sd">Likes are resolved to real Qloo entities via Qloo Search.</div></li>
+          <li><div className="st">3. EXPLORE CULTURE</div><div className="sd">Qloo Insights ranks candidates by affinity (0-1) with explainability.</div></li>
+          <li><div className="st">4. BUILD PLAN</div><div className="sd">Top picks become a 5-stop day: coffee, afternoon, dining, movie, music.</div></li>
+          <li><div className="st">5. VALIDATE</div><div className="sd">Coherence is the mean affinity. Missing slots are shown as missing, never invented.</div></li>
+        </ol>
+      </section>
+
       {plan && (
         <>
           <section className="card coherence-card" aria-labelledby="coherence-heading">
