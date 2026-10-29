@@ -13,6 +13,12 @@ const EXAMPLE = {
   avoid: "",
 };
 
+const PRESETS = [
+  { name: "Music lover day", likes: "Frank Ocean, Kendrick Lamar, jazz, vinyl records, late-night listening" },
+  { name: "Film lover day", likes: "Interstellar, Christopher Nolan, sci-fi, cinema, film scores" },
+  { name: "Foodie day", likes: "specialty coffee, sushi, street food, quiet restaurants, brunch" },
+];
+
 function splitList(text: string): string[] {
   return text
     .split(/[,\n]+/)
@@ -30,6 +36,7 @@ export default function Home() {
   const [plan, setPlan] = useState<PlanResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   async function callPlan(body: Record<string, unknown>) {
     setLoading(true);
@@ -118,6 +125,23 @@ export default function Home() {
           Qloo&rsquo;s taste graph. Every pick shows its affinity and why it
           matches, so you can see the evidence instead of trusting a guess.
         </p>
+        <div className="chips" aria-label="Preset days">
+          {PRESETS.map((preset) => (
+            <button
+              key={preset.name}
+              className="chip"
+              type="button"
+              onClick={() => {
+                setLikes(preset.likes);
+                setBudget("Moderate");
+                setTimeAvailable("Full day");
+                document.getElementById("build-form")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              {preset.name}
+            </button>
+          ))}
+        </div>
         <div className="btnrow">
           <a className="btn-primary" href="#build-form">Build my day</a>
           <button
@@ -325,6 +349,31 @@ export default function Home() {
               {budget.trim() ? <span><strong>Budget</strong> {budget.trim()}</span> : null}
               {timeAvailable.trim() ? <span><strong>Time</strong> {timeAvailable.trim()}</span> : null}
               {plan.missingSlots.length > 0 ? <span><strong>Missing</strong> {plan.missingSlots.length}</span> : null}
+            </div>
+            <div className="btnrow" style={{ marginTop: 16 }}>
+              <button
+                className="btn-ghost"
+                type="button"
+                onClick={async () => {
+                  const lines = [
+                    `VibeAtlas day in ${city.trim() || "New York"} — coherence ${Math.round(plan.coherence * 100)}% (${plan.mode} mode)`,
+                    ...ALL_SLOTS.map((slot) => {
+                      const pick = plan.picks.find((p) => p.slot === slot);
+                      const meta = SLOT_META[slot];
+                      return pick ? `${meta.time} ${meta.label}: ${pick.name} (${pick.affinity.toFixed(2)})` : `${meta.time} ${meta.label}: missing`;
+                    }),
+                  ];
+                  try {
+                    await navigator.clipboard.writeText(lines.join("\n"));
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch {
+                    setCopied(false);
+                  }
+                }}
+              >
+                {copied ? "✓ Copied!" : "Copy day summary"}
+              </button>
             </div>
             <div className="coherence">
               <div>
