@@ -37,6 +37,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   async function callPlan(body: Record<string, unknown>) {
     setLoading(true);
@@ -450,6 +451,39 @@ export default function Home() {
               >
                 Download day plan (.txt)
               </button>
+              <button
+                className="btn-ghost"
+                type="button"
+                onClick={() => window.print()}
+              >
+                Print day plan
+              </button>
+            </div>
+            <div className="share-row">
+              <span className="meta">Share: </span>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`My VibeAtlas day in ${city.trim() || "New York"} — coherence ${Math.round(plan.coherence * 100)}% — your taste, mapped.`)}&url=${encodeURIComponent("https://vibeatlas-mrsarimofficials-projects.vercel.app/")}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                X
+              </a>
+              {" · "}
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("https://vibeatlas-mrsarimofficials-projects.vercel.app/")}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Facebook
+              </a>
+              {" · "}
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`My VibeAtlas day in ${city.trim() || "New York"} — coherence ${Math.round(plan.coherence * 100)}% https://vibeatlas-mrsarimofficials-projects.vercel.app/`)}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                WhatsApp
+              </a>
             </div>
             <div className="coherence">
               <div>
@@ -616,13 +650,26 @@ export default function Home() {
                     <p className="why">
                       <strong>Why this match?</strong> {pick.why}
                     </p>
-                    {pick.contributors.length > 0 && (
-                      <p className="meta">
-                        Qloo explainability contributors:{" "}
-                        {pick.contributors
-                          .map((c) => `${c.name} (${c.score})`)
-                          .join(", ")}
-                      </p>
+                    <button
+                      className="btn-veto"
+                      type="button"
+                      onClick={() => setExpandedId(expandedId === pick.id ? null : pick.id)}
+                    >
+                      {expandedId === pick.id ? "Hide details ▲" : "Show details ▼"}
+                    </button>
+                    {expandedId === pick.id && (
+                      <div className="pick-details">
+                        <p className="meta">Qloo evidence: {pick.evidence}</p>
+                        {pick.contributors.length > 0 && (
+                          <p className="meta">
+                            Qloo explainability contributors:{" "}
+                            {pick.contributors.map((c) => `${c.name} (${c.score})`).join(", ")}
+                          </p>
+                        )}
+                        {pick.tags.length > 0 && (
+                          <p className="meta">All tags: {pick.tags.join(", ")}</p>
+                        )}
+                      </div>
                     )}
                     <button
                       className="btn-veto"
@@ -705,7 +752,7 @@ export default function Home() {
           you already love and shows you why each stop fits. If a pick does not feel right,
           replace just that one stop. The rest of your day stays yours.
         </p>
-        <p className="hint">— Muhammad Sarim, Karachi · Built new for the Qloo Agentic Hackathon</p>
+        <p className="hint">— Muhammad Sarim · USA · Built new for the Qloo Agentic Hackathon</p>
       </section>
 
       <footer>

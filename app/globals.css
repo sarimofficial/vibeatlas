@@ -139,6 +139,13 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .profile-row:last-child { padding-bottom: 0; }
 .profile-row strong { display: block; font-size: var(--caption); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
 
+@media print {
+  .topbar, .hero, .btnrow, .share-row, button, a { display: none !important; }
+  body { background: #fff; }
+  .wrap { padding: 0; }
+}
+.share-row { margin-top: 12px; font-size: 0.92rem; }
+
 /* Route map — map-first schematic, horizontal on desktop, scroll on mobile */
 .route-card { overflow: hidden; }
 .route-map { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 2px dashed var(--line-strong); }
@@ -151,6 +158,8 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   .route-map { display: flex; overflow-x: auto; padding-bottom: 8px; }
   .route-node { flex: 0 0 150px; }
 }
+
+.pick-details { margin-top: 14px; padding: 12px 14px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-sm); }
 
 /* Human touch — varied board, not a perfect uniform grid */
 .timeline .pick-coffee { grid-column: 1 / -1; }
