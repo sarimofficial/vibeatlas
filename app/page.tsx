@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { PlanResponse, Slot } from "@/lib/types";
 import { ALL_SLOTS, SLOT_META } from "@/lib/types";
 
@@ -94,6 +94,54 @@ export default function Home() {
     setExcluded([]);
     setError(null);
   }
+
+  function summaryLines(): string[] {
+    if (!plan) return [];
+    const lines = [
+      `VibeAtlas day in ${city.trim() || "New York"} — coherence ${Math.round(plan.coherence * 100)}% (${plan.mode} mode)`,
+      "",
+    ];
+    for (const slot of ALL_SLOTS) {
+      const pick = plan.picks.find((p) => p.slot === slot);
+      const meta = SLOT_META[slot];
+      if (pick) {
+        lines.push(`${meta.time} ${meta.label}: ${pick.name} (${pick.affinity.toFixed(2)})`);
+        lines.push(`  Why: ${pick.why}`);
+      } else {
+        lines.push(`${meta.time} ${meta.label}: missing — not invented`);
+      }
+    }
+    return lines;
+  }
+
+  const sharedLoaded = useRef(false);
+  useEffect(() => {
+    if (sharedLoaded.current) return;
+    sharedLoaded.current = true;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const sharedLikes = params.get("likes");
+      if (!sharedLikes) return;
+      const sharedCity = params.get("city") || "New York";
+      const sharedBudget = params.get("budget") || "";
+      const sharedTime = params.get("time") || "";
+      setLikes(sharedLikes);
+      setCity(sharedCity);
+      setBudget(sharedBudget);
+      setTimeAvailable(sharedTime);
+      void callPlan({
+        likes: splitList(sharedLikes),
+        city: sharedCity || undefined,
+        budget: sharedBudget || undefined,
+        timeAvailable: sharedTime || undefined,
+        avoid: [],
+        excluded: [],
+      });
+    } catch {
+      // Shared link parsing is best-effort; the form still works manually.
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <main className="wrap">
@@ -355,16 +403,8 @@ export default function Home() {
                 className="btn-ghost"
                 type="button"
                 onClick={async () => {
-                  const lines = [
-                    `VibeAtlas day in ${city.trim() || "New York"} — coherence ${Math.round(plan.coherence * 100)}% (${plan.mode} mode)`,
-                    ...ALL_SLOTS.map((slot) => {
-                      const pick = plan.picks.find((p) => p.slot === slot);
-                      const meta = SLOT_META[slot];
-                      return pick ? `${meta.time} ${meta.label}: ${pick.name} (${pick.affinity.toFixed(2)})` : `${meta.time} ${meta.label}: missing`;
-                    }),
-                  ];
                   try {
-                    await navigator.clipboard.writeText(lines.join("\n"));
+                    await navigator.clipboard.writeText(summaryLines().join("\n"));
                     setCopied(true);
                     setTimeout(() => setCopied(false), 2000);
                   } catch {
@@ -373,6 +413,42 @@ export default function Home() {
                 }}
               >
                 {copied ? "✓ Copied!" : "Copy day summary"}
+              </button>
+              <button
+                className="btn-ghost"
+                type="button"
+                onClick={async () => {
+                  try {
+                    const params = new URLSearchParams();
+                    params.set("likes", likes);
+                    if (city.trim()) params.set("city", city.trim());
+                    if (budget.trim()) params.set("budget", budget.trim());
+                    if (timeAvailable.trim()) params.set("time", timeAvailable.trim());
+                    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+                    await navigator.clipboard.writeText(url);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch {
+                    setCopied(false);
+                  }
+                }}
+              >
+                Copy share link
+              </button>
+              <button
+                className="btn-ghost"
+                type="button"
+                onClick={() => {
+                  const blob = new Blob([summaryLines().join("\n")], { type: "text/plain" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = "vibeatlas-day.txt";
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+              >
+                Download day plan (.txt)
               </button>
             </div>
             <div className="coherence">
