@@ -108,6 +108,11 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .hint { color: var(--muted); font-size: 0.92rem; margin: 10px 0 0; overflow-wrap: anywhere; word-break: break-word; }
 .hint:first-child { margin-top: 0; }
 
+/* Day summary — Pinterest Pin 1 pattern: one summary strip above the timeline */
+.day-summary { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 20px; padding: 14px 0; border-top: 1px solid rgba(250, 247, 241, 0.25); border-bottom: 1px solid rgba(250, 247, 241, 0.25); font-size: 0.92rem; color: #c9c0b2; }
+.day-summary strong { color: var(--paper); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.75rem; margin-right: 6px; }
+.pick .meta strong { color: var(--ink); font-weight: 800; }
+
 /* Coherence — dark featured panel, not another white card */
 .coherence-card { background: var(--ink); color: var(--paper); border-color: var(--ink); box-shadow: var(--shadow-lg); }
 .coherence-card .section-num { color: #e8a07f; }

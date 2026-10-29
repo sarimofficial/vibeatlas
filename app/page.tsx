@@ -247,6 +247,14 @@ export default function Home() {
                 <h2 id="coherence-heading">Day coherence</h2>
               </div>
             </div>
+            <div className="day-summary" aria-label="Day summary">
+              <span><strong>City</strong> {city.trim() || "New York"}</span>
+              <span><strong>Stops</strong> {plan.picks.length} of 5</span>
+              <span><strong>Coherence</strong> {Math.round(plan.coherence * 100)}%</span>
+              {budget.trim() ? <span><strong>Budget</strong> {budget.trim()}</span> : null}
+              {timeAvailable.trim() ? <span><strong>Time</strong> {timeAvailable.trim()}</span> : null}
+              {plan.missingSlots.length > 0 ? <span><strong>Missing</strong> {plan.missingSlots.length}</span> : null}
+            </div>
             <div className="coherence">
               <div>
                 <div className="big">{Math.round(plan.coherence * 100)}%</div>
@@ -326,7 +334,7 @@ export default function Home() {
                     <div className="time" aria-hidden="true">{meta.icon}</div>
                     <div className="pick-body">
                       <div className="meta">
-                        {meta.time} · {meta.label}
+                        <strong>{meta.time}</strong> · {meta.label}
                       </div>
                       <p className="hint" style={{ margin: "6px 0 0" }}>
                         No Qloo pick for this slot — shown as missing rather
@@ -343,7 +351,7 @@ export default function Home() {
                   <div className="pick-body">
                     <div className="pick-head">
                       <div className="meta">
-                        {meta.time} · {meta.label} · {pick.evidence}
+                        <strong>{meta.time}</strong> · {meta.label} · {pick.evidence}
                       </div>
                       <span className="affinity-value">
                         {pick.affinity.toFixed(2)} / 1.00
