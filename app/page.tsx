@@ -453,7 +453,19 @@ export default function Home() {
                   <div className="route-node" key={slot}>
                     <div className="route-stop">{String(i + 1).padStart(2, "0")}</div>
                     <div className="route-time">{meta.time}</div>
-                    <div className="route-name">{pick ? pick.name : "Missing — not invented"}</div>
+                    <div className="route-name">
+                      {pick ? (
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${pick.name} ${city.trim() || "New York"}`)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {pick.name}
+                        </a>
+                      ) : (
+                        "Missing — not invented"
+                      )}
+                    </div>
                     {pick ? <div className="route-aff">{Math.round(pick.affinity * 100)}%</div> : null}
                   </div>
                 );
@@ -544,6 +556,15 @@ export default function Home() {
                     >
                       ✕ Replace this pick only
                     </button>
+                    <div style={{ marginTop: 10 }}>
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${pick.name} ${city.trim() || "New York"}`)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View on Google Maps ↗
+                      </a>
+                    </div>
                   </div>
                 </article>
               );
